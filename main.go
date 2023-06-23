@@ -80,7 +80,12 @@ func runCommand(command string, verbose bool) {
 		log.Printf("Missing command")
 		return
 	}
-	cmd := exec.Command(commandElements[0], commandElements[1:]...)
+	var args []string
+	for _, arg := range commandElements[1:] {
+		arg = strings.Trim(arg, "\"")
+		args = append(args, strings.Trim(arg, "'"))
+	}
+	cmd := exec.Command(commandElements[0], args...)
 	output, err := cmd.Output()
 
 	if err != nil {
